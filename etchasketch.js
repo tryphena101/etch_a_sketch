@@ -11,24 +11,25 @@
 //use CSS grid
 //use nested for loop to create a grid
 const container = document.querySelector('.container');
-const buttons = document.querySelector('.buttons');
-const reset = document.createElement('button');
 const boxs = container.querySelectorAll('.box');
-const grey = document.createElement('button');
-const rgb = document.createElement('button');
-const red = document.createElement('button');
-const slider = document.createElement('input');
-slider.setAttribute('type', 'range');
-buttons.appendChild(slider)
+// const buttons = document.querySelector('.buttons');
 
-//create on click event that allows user to draw in the box
-// window.onload = clickBox();
-function clickBox(){
-    const boxs = container.querySelectorAll('.box')
-      boxs.forEach(box => box.addEventListener('mouseover', () => {
-          box.style.background = 'black'
-      }))
-  }
+const reset = document.querySelector('.reset');
+const grey = document.querySelector('.grey');
+
+const black = document.querySelector('.black');
+const rgb = document.querySelector('.rgb');
+const slider = document.createElement('input');
+const sliderSelect = document.querySelector('.slider')
+slider.classList.add('range_slider');
+// const slider1 = document.querySelector('.slider');
+slider.setAttribute('type', 'range');
+slider.setAttribute('min', 1);
+sliderSelect.appendChild(slider);
+
+const default_row = 16;
+const default_column = 16;
+
 
 
 //function that creates grid
@@ -42,29 +43,45 @@ function createGrid (col, rows) {
     }
 }
 
+//to refactor code so there aren't any repetitive functions
+
+//create on click event that allows user to draw in the box
+// window.onload = clickBox();
+function clickGrey () {
+    const boxs = container.querySelectorAll('.box')
+      boxs.forEach(box => box.addEventListener('mouseover', () => {
+          box.style.background = 'grey'
+      }))
+    grey.addEventListener('click', clickGrey);
+  }
+
+
 //function that changes colours of grids to grey on click
-function greyGrid () {
+function draw () {
   const boxs = container.querySelectorAll('.box')
     boxs.forEach(box => box.addEventListener('mouseover', () => {
-        box.style.background = 'grey'
+          box.style.background = 'black'
     }))
-    grey.addEventListener('click', greyGrid);
-    grey.textContent='Grey';
-    buttons.appendChild(grey);
+    black.addEventListener('click', draw);
+    // grey.textContent='Grey';
+    // buttons.appendChild(grey);
 }
 
 
 
 
- function redGrid () {
-   const boxs = container.querySelectorAll('.box')
-     boxs.forEach(box => box.addEventListener('mouseover', () => {
-         box.style.background = 'red'
-     }))
-     red.addEventListener('click', redGrid);
-     red.textContent='RED';
-     buttons.appendChild(red);
- }
+
+
+
+ // function redGrid () {
+ //   const boxs = container.querySelectorAll('.box')
+ //     boxs.forEach(box => box.addEventListener('mouseover', () => {
+ //         box.style.background = 'red'
+ //     }))
+ //     red.addEventListener('click', redGrid);
+ //     red.textContent='RED';
+ //     buttons.appendChild(red);
+ // }
 
  function rgbColor () {
    const boxs = container.querySelectorAll('.box')
@@ -76,46 +93,80 @@ function greyGrid () {
               box.style.background = RGB;
           }))
           rgb.addEventListener('click', rgbColor);
-          rgb.textContent='RGB';
-          buttons.appendChild(rgb);
+          // buttons.appendChild(rgb);
       }
 
-//change size of grid
+
+//change size of grid and append this logic to the UI slider
 function modifyGridSize() {
   let boxes = container.querySelectorAll(".box");
   boxes.forEach(box => box.remove());
   createGrid(slider.value, slider.value);
-  clickBox();
-  greyGrid();
-  redGrid();
+  clickGrey();
   rgbColor();
-  clickBox();
-  resetGrid();
+  // clickBox();
+  // resetGrid();
+  draw();
 
 }
 
 slider.addEventListener("mouseup", modifyGridSize);
 
-
- function resetGrid() {
- reset.addEventListener('click', () => {
-   boxs.textContent='';
-   window.setTimeout(() => {
-       window.location.reload(true);
-   }, 0);
- });
- reset.textContent='Reset';
- buttons.appendChild(reset);
- }
+// slider1.addEventListener("mouseup", function() {
+//     gridCount = slider1.value;
+//     createGrid(gridCount);
+//     for (i=0; i < (gridCount * gridCount); i++) {
+//         boxs[i].style.background = 'black';
+//     };
+//   }, false)
 
 
+ // function resetGrid() {
+ // reset.addEventListener('click', () => {
+ //   boxs.textContent='';
+ //   // window.setTimeout(() => {
+ //   //     window.location.reload(true);
+ //   // }, 0);
+ //   window.setTimeout(() => {
+ //       createGrid(default_row, default_column)
+ //   }, 0);
+ // });
+ // }
 
-createGrid(16,16);
-greyGrid();
-redGrid();
+//reset the grid and append that logic to the Erase button
+ function clearDiv() {
+  let boxes = container.querySelectorAll(".box");
+  boxes.forEach((box) =>
+    box.style.backgroundColor = "#dfdfdf"
+  )
+}
+reset.onclick = () => clearDiv();
+
+// function clearGrid() {
+//   boxs.textContent = '';
+// }
+//
+// reset.addEventListener('click', () =>{
+//   clearGrid();
+// })
+// function reloadGrid() {
+//   clearGrid()
+//   createGrid(current_row, current_column)
+// }
+//
+// reset.onclick = () => reloadGrid()
+
+
+
+createGrid(default_row, default_column);
+clickGrey();
+// resetGrid();
 rgbColor();
-clickBox();
-resetGrid()
+draw();
+
+
+
+
 
 //clearing the grid squares
 
